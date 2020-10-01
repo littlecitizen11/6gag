@@ -12,11 +12,7 @@ class InMemoryStorage{
         }
         let property_id=_uuid.v4();
         item.guid=property_id;
-        this.storage[collectionName].push(
-            {
-                item
-            }
-        )
+        this.storage[collectionName].push({item})
         console.log(item);
         return property_id;
     };
@@ -32,11 +28,25 @@ class InMemoryStorage{
             if(this.storage[collectionName])
                 return this.storage[collectionName];
     };
-    remove(collectionName){
+    findIndex(collectionName, itemId){
         if((collectionName in this.storage)) {
-            delete this.storage[collectionName];
+            for(let i=0;i<this.storage[collectionName].length;i++)
+            {
+                if(this.storage[collectionName][i].item.guid==itemId)
+                    return i;
+            }
         }
-    }
+        return -1;
+    };
+    update(collectionName, item){
+        console.log(item);
+      if((collectionName in this.storage)){
+          let index = this.findIndex(collectionName, item.guid);
+          console.log(index);
+          this.storage[collectionName][index].item.liked=item.liked+1;
+          return this.storage[collectionName][index].item;
+      }
+    };
 
 }
 

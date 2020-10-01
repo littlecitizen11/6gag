@@ -39,6 +39,20 @@ app.get('/api/allMeme', (req,res)=>{
     res.status(200).send(foundMeme);
 });
 
+app.post('/api/updateMeme',(req,res,next)=>{
+    const meme = storage.update('memes',{
+        guid:req.body.updateElement.guid,
+        liked:req.body.updateElement.liked});
+    if(!meme){
+        console.log("there is no meme");
+        next(new Error('no meme'));
+    }
+    else
+    {
+        res.status(200).send({meme});
+    }
+});
+
 app.post('/api/createMeme', (req,res,next)=>{
     const meme = storage.create('memes',{
         guid:req.body.newMeme.guid,

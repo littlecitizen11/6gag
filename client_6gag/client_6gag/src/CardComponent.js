@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 export default function RecipeReviewCard(props) {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
-    const [like, setLike] = React.useState(0);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -80,7 +79,7 @@ export default function RecipeReviewCard(props) {
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
-                <IconButton className="likeBtn" aria-label="add to favorites">
+                <IconButton className="likeBtn" aria-label="add to favorites" onClick={()=>props.onLike(props.guid, props.liked)}>
                     <FavoriteIcon />
                     <Typography variant="body2" color="textSecondary" component="p">
                         {props.liked}

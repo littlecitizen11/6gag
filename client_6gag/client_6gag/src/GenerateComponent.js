@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Col, Container, Form, Row} from "react-bootstrap";
 import CardComponent from "./CardComponent";
 import moment from "moment";
@@ -6,11 +6,25 @@ import 'react-images-upload'
 import ImagesUploader from "react-images-uploader";
 import 'react-images-uploader/styles.css';
 import 'react-images-uploader/font.css';
-import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import SendIcon from '@material-ui/icons/Send';
+import IconButton from "@material-ui/core/IconButton";
+import Toolbar from "@material-ui/core/Toolbar";
+import AppBar from "@material-ui/core/AppBar";
+import Typography from "@material-ui/core/Typography";
+import MenuIcon from '@material-ui/icons/Menu';
+import AppBarComponent from "./AppBarComponent";
 
 
+const useStyles = makeStyles((theme) => ({
+    button: {
+        margin: theme.spacing(1),
+    },
+}));
 
 function GenerateComponent(props){
+    const classes = useStyles();
     const [allCards,setAllCards] = React.useState([]);
     const [cards, setCard] = React.useState([]);
     const [user, setUser] = React.useState("");
@@ -19,24 +33,8 @@ function GenerateComponent(props){
     const [story, setStory] = React.useState("");
     const [memeImages, setImages] = React.useState("");
     const [guidId, setGuid] = React.useState("");
-    const maxNumber = 1;
+    const [like, setLike]=React.useState(0);
 
-    const allMemes = ()=>{
-        const getRequest = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        };
-
-        (fetch('http://localhost:9090/api/allMeme', getRequest)
-            .then((response) =>response.json())
-            .then((responseJson) => {
-                var anaaref=responseJson;
-                setAllCards([anaaref]);
-            })
-            .catch((error) => {
-                console.error(error);
-            }));
-    };
 
     function addCard(e){
         e.preventDefault();
@@ -49,7 +47,7 @@ function GenerateComponent(props){
             title:title,
             dateUpload:date,
             image:memeImages,
-            liked:"99",
+            liked:like,
             description:description,
             story:story
         };
@@ -70,12 +68,10 @@ function GenerateComponent(props){
                 }));
         const newCard = [...cards, newMeme ];
         setCard(newCard);
-
     }
 
 
     useEffect(() => {
-        // GET request using fetch inside useEffect React hook
         const getRequest = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -85,25 +81,43 @@ function GenerateComponent(props){
             .then((response) => response.json())
             .then((responseJson) => {
                 setAllCards(responseJson);
-                //console.log(responseJson);
             })
             .catch((error) => {
                 console.error(error);
             }));
 
-// empty dependency array means this effect will only run once (like componentDidMount in classes)
-    }, [cards]);
+    }, [cards, like]);
 
-    {allCards.map((card, index) => (
-        console.log(card.item)
-    ))}
+    function AddLike(guid, liked){
+        let updateElement ={
+            guid:guid,
+            liked:liked,
+        };
+        let requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                updateElement })
+        };
+        (fetch('http://localhost:9090/api/updateMeme', requestOptions)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                setLike(responseJson);
+            })
+            .catch((error) => {
+                console.error(error);
+            }));
+    }
+
     return(
+
         <Container>
+        <AppBarComponent/>
         <Container fluid>
             <Row>
                 {allCards.map((card, index) => (
                     <Col>
-                        <CardComponent guid={card.item.guid} index={card.item.index} user={card.item.user} liked={card.item.liked} author={card.item.author} title={card.item.title} dateUpload={card.item.dateUpload} image={card.item.image} bigDescription={card.item.story} description={card.item.description}/>
+                        <CardComponent onLike={AddLike} guid={card.item.guid} index={card.item.index} user={card.item.user} liked={card.item.liked} author={card.item.author} title={card.item.title} dateUpload={card.item.dateUpload} image={card.item.image} bigDescription={card.item.story} description={card.item.description}/>
                     </Col>
                 ))}
             </Row>
@@ -145,8 +159,10 @@ function GenerateComponent(props){
                 />
 
             </Form.Group>
-            <button onClick={addCard}>Add</button>
-            <button onClick={()=>allMemes()}>show all</button>
+            <Button variant="contained" color="primary" className={classes.button} onClick={addCard}>
+                Send
+                <SendIcon className={classes.rightIcon} />
+            </Button>
 
         </Form>
     </Row>
