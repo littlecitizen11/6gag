@@ -82,7 +82,7 @@ export default function RecipeReviewCard(props) {
                 <IconButton className="likeBtn" aria-label="add to favorites" onClick={()=>props.onLike(props.guid, props.liked)}>
                     <FavoriteIcon />
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {props.liked}
+                        {parseInt(props.liked)}
                     </Typography>
                 </IconButton>
                 <IconButton

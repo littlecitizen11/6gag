@@ -47,7 +47,7 @@ function GenerateComponent(props){
             title:title,
             dateUpload:date,
             image:memeImages,
-            liked:like,
+            liked:0,
             description:description,
             story:story
         };

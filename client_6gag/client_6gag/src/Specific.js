@@ -32,7 +32,6 @@ function Specific(props) {
 */
     return (
         <Container className="Specific">
-            <AppBarComponent/>
             <Container fluid>
                 <Row>
                     <Col>
