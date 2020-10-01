@@ -10,20 +10,27 @@ class InMemoryStorage{
         if(!(collectionName in this.storage)) {
             this.storage[collectionName]=[];
         }
-
+        let property_id=_uuid.v4();
+        item.guid=property_id;
         this.storage[collectionName].push(
             {
-                property_id: _uuid.v4(),
                 item
             }
         )
-        return this.storage[collectionName];
+        console.log(item);
+        return property_id;
     };
 
     find(collectionName,itemToSearch){
         if((collectionName in this.storage)) {
-            return this.storage[collectionName].filter(element=>element.item.username===itemToSearch);
+            return this.storage[collectionName].filter(element=>element.item.guid==itemToSearch);
         }
+    };
+    all(collectionName)
+    {
+        if(collectionName in this.storage)
+            if(this.storage[collectionName])
+                return this.storage[collectionName];
     };
     remove(collectionName){
         if((collectionName in this.storage)) {

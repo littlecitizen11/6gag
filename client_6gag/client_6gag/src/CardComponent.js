@@ -66,7 +66,7 @@ export default function RecipeReviewCard(props) {
                 title={props.title}
                 subheader={props.dateUpload}
             />
-            <Link to={'/specific/' + props.index} >
+            <Link to={'/specific/' + props.guid} >
             <CardMedia
                 className={classes.media}
                 image={props.image}

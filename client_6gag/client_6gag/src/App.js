@@ -1,17 +1,13 @@
 import React, {useState} from 'react';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.css";
-import CardComponent from "./CardComponent";
-
 import GenerateComponent from "./GenerateComponent";
 import {Container} from "react-bootstrap";
-import {Col} from "react-bootstrap";
-import {Row} from "react-bootstrap";
+
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
 import Specific from "./Specific";
 
